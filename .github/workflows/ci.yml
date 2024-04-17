@@ -8,6 +8,9 @@ on:
     # run the CI workflow at 6:00am UTC every Monday
     - cron: '0 6 * * MON'
 
+permissions:
+  contents: read
+
 jobs:
   build-test:
     runs-on: ubuntu-latest
@@ -23,7 +26,7 @@ jobs:
 
     steps:
     - name: Check out repository code
-      uses: actions/checkout@v3
+      uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
       with:
         fetch-depth: 0
 
@@ -31,7 +34,7 @@ jobs:
       run: cd tests; ./init_containers.sh
     
     - name: Cache Composer dependencies
-      uses: actions/cache@v3
+      uses: actions/cache@e12d46a63a90f2fae62d114769bbf2a179198b5c # v3.3.3
       with:
         path: |
           /tmp/composer-cache
@@ -42,13 +45,13 @@ jobs:
           ${{ runner.os }}-php${{ matrix.php_version}}-skosmos3-
 
     - name: Install Composer dependencies
-      uses: php-actions/composer@v6
+      uses: php-actions/composer@8a65f0d3c6a1d17ca4800491a40b5756a4c164f3 # v6.1.2
       with:
         php_version: ${{ matrix.php_version }}
         php_extensions: intl xsl pcov
 
     - name: Install Node
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@1a4442cacd436585916779262731d5b162bc6ec7 # v3.8.2
       with:
         node-version: 16.x
 
@@ -62,7 +65,7 @@ jobs:
       run: cd resource/js; npx standard *.js
 
     - name: Run PHPUnit tests
-      uses: php-actions/phpunit@v3
+      uses: php-actions/phpunit@8b81f7e713aba7ca15632bad78c56635ff327104 # v3.0.3
       env:
         LANGUAGE: fr
       with:
@@ -73,20 +76,20 @@ jobs:
         configuration: phpunit.xml
 
     - name: Publish code coverage to Code Climate
-      uses: paambaati/codeclimate-action@v5.0.0
+      uses: paambaati/codeclimate-action@a1831d7162ea1fbc612ffe5fb3b90278b7999d59 # v5.0.0
       env:
         CC_TEST_REPORTER_ID: fb98170a5c7ea9cc2bbab19ff26268335e6a11a4f8267ca935e5e8ff4624886c
       with:
         prefix: /app
 
     - name: Publish code coverage to Codecov
-      uses: codecov/codecov-action@v3
+      uses: codecov/codecov-action@ab904c41d6ece82784817410c45d8b8c02684457 # v3.1.6
 
   cypress-test:
     runs-on: ubuntu-latest
     steps:
     - name: Check out repository code
-      uses: actions/checkout@v3
+      uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
       with:
         fetch-depth: 0
 
@@ -94,7 +97,7 @@ jobs:
       run: cd tests; ./init_containers.sh
 
     - name: Install Node
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@1a4442cacd436585916779262731d5b162bc6ec7 # v3.8.2
       with:
         node-version: 16.x
 
